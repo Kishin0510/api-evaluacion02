@@ -38,43 +38,43 @@ const products = [];
 // Add your routes here
 app.get('/api/products', async (req, res) => {
     await client.connect();
-    
+    const collection = client.db("Product").collection("products");
+    const products = await collection.find().toArray();
     res.json(products);
+    await client.close();
 });
 
-app.get('/users', async (req, res) => {
-  await client.connect();
-  const collection = client.db("Dumbo").collection("users");
-  const users = await collection.find().toArray();
-  res.json(users);
-  await client.close();
-  })
-
-app.post('/users', async (req, res) => {
-  const newUser = req.body;
-  const hashedPassword = await bcrypt.hash(newUser.password, 10);
-  newUser.password = hashedPassword;
-  await client.connect();
-  const collection = client.db("Dumbo").collection("users");
-  const result = await collection.insertOne(newUser);
-  res.json(result.ops);
-  await client.close();
-  console.log('User added');
+app.post('/api/products', async (req, res) => {
+    const newProduct = req.body;
+    await client.connect();
+    const collection = client.db("Product").collection("products");
+    const result = await collection.insertOne(newProduct);
+    res.json(result.ops);
+    await client.close();
+    console.log('Product added');
  });
 
- app.get('/users/:id', (req, res) => {
-    const userId = req.params.id;
-    const user = users.find(u => u.id === userId);
-    res.json(user);
-    console.log('User found: ',user.value.name);
+app.put('/api/products/:id', async (req, res) => { 
+    const productId = req.params.id;
+    const updatedProduct = req.body;
+    await client.connect();
+    const collection = client.db("Product").collection("products");
+    const result = await collection.updateOne({ _id: productId }, { $set: updatedProduct });
+    res.json(result);
+    await client.close();
+    console.log('Product updated');
  });
 
- app.delete('/users/:id', (req, res) => {
-    const userId = req.params.id;
-    const userIndex = users.findIndex(u => u.id === userId);
-    users.splice(userIndex, 1);
-    console.log('User deleted');
+app.delete('/api/products/:id', async (req, res) => { 
+    const productId = req.params.id;
+    await client.connect();
+    const collection = client.db("Product").collection("products");
+    const result = await collection.deleteOne({ _id: productId });
+    res.json(result);
+    await client.close();
+    console.log('Product deleted');
  });
+
 // Start the server
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
