@@ -5,6 +5,8 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 
+const port = process.env.PORT || 3001;
+
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://nicolas:FpKIfHfxMz9p2oki@cluster0.tunfkso.mongodb.net/?retryWrites=true&w=majority";
 
@@ -72,6 +74,6 @@ app.delete('/api/products/:id', async (req, res) => {
  });
 
 // Start the server
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
+app.listen(port, () => {
+  console.log('Server listening on port ' + port);
 });
