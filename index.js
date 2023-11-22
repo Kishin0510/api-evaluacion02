@@ -5,8 +5,6 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 
-const secretKey = process.env.JWT_SECRET_KEY;
-
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://nicolas:FpKIfHfxMz9p2oki@cluster0.tunfkso.mongodb.net/?retryWrites=true&w=majority";
 
