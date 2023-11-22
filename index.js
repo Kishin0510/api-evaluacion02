@@ -38,6 +38,7 @@ const products = [];
 // Add your routes here
 app.get('/api/products', async (req, res) => {
     await client.connect();
+    
     res.json(products);
 });
 
